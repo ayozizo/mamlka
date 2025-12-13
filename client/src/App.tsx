@@ -7,6 +7,8 @@ import { GameProvider } from "@/lib/game-context";
 import WelcomeScreen from "@/pages/WelcomeScreen";
 import WorldMap from "@/pages/WorldMap";
 import LevelView from "@/pages/LevelView";
+import Settings from "@/pages/Settings";
+import TeacherReports from "@/pages/TeacherReports";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -15,6 +17,8 @@ function Router() {
       <Route path="/" component={WelcomeScreen} />
       <Route path="/map" component={WorldMap} />
       <Route path="/level/:id" component={LevelView} />
+      <Route path="/settings" component={Settings} />
+      <Route path="/reports" component={TeacherReports} />
       <Route component={NotFound} />
     </Switch>
   );
