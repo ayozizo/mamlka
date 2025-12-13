@@ -1,0 +1,25 @@
+{
+  "name": "مملكة الكلمات والخيال",
+  "short_name": "مملكة الكلمات",
+  "description": "لعبة تعليمية بريميوم لتقوية الإملاء والتفكير الإبداعي للأطفال",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0F52BA",
+  "theme_color": "#0F52BA",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "assets/premium_assets/icon_castle_premium.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/premium_assets/icon_castle_premium.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["education", "games"],
+  "lang": "ar",
+  "dir": "rtl"
+}

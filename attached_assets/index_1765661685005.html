@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="مملكة الكلمات والخيال - لعبة تعليمية عربية بريميوم لتقوية الإملاء والتفكير الإبداعي للأطفال">
+    <meta name="theme-color" content="#0F52BA">
+    <title>مملكة الكلمات والخيال - نسخة بريميوم</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;600;700;900&family=Amiri:wght@400;700&family=Lateef:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/game.css">
+    <link rel="icon" type="image/png" href="assets/premium_assets/icon_castle_premium.png">
+</head>
+<body>
+    <div class="game-container">
+        <!-- Header Section -->
+        <header class="game-header premium-glass">
+            <div class="header-overlay"></div>
+            <img class="header-background" src="assets/premium_assets/bg_menu_premium.png" alt="خلفية مملكة الكلمات والخيال">
+            <div class="header-content">
+                <div class="logo-container animate-float">
+                    <img id="main-logo" src="assets/premium_assets/icon_castle_premium.png" alt="شعار المملكة" class="logo-premium">
+                    <div class="logo-glow"></div>
+                </div>
+                <h1 class="game-title golden-text">مملكة الكلمات والخيال</h1>
+                <p class="game-subtitle">رحلة تعليمية بريميوم لتقوية الإملاء والتفكير الإبداعي</p>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="game-main">
+            <!-- Main Menu Screen -->
+            <section id="screen-main" class="screen active premium-card">
+                <div class="welcome-section">
+                    <h2 class="welcome-title">مرحباً بكم في المملكة!</h2>
+                    <p class="welcome-text">اختر مغامرتك التعليمية واكتشف عوالم الإملاء والخيال</p>
+                </div>
+                
+                <div class="menu-buttons-container">
+                    <button id="btn-start" class="premium-btn glass-button animate-pulse">
+                        <i class="fas fa-play-circle"></i>
+                        <span>ابدأ المغامرة</span>
+                    </button>
+                    
+                    <button id="btn-world-map" class="premium-btn glass-button">
+                        <i class="fas fa-map-marked-alt"></i>
+                        <span>خريطة العوالم</span>
+                    </button>
+                    
+                    <button id="btn-profile" class="premium-btn glass-button">
+                        <i class="fas fa-user-crown"></i>
+                        <span>ملفي الشخصي</span>
+                    </button>
+                    
+                    <button id="btn-leaderboard" class="premium-btn glass-button">
+                        <i class="fas fa-trophy"></i>
+                        <span>قاعة الشرف</span>
+                    </button>
+                    
+                    <button id="btn-reports" class="premium-btn glass-button">
+                        <i class="fas fa-chart-line"></i>
+                        <span>تقارير المعلم</span>
+                    </button>
+                    
+                    <button id="btn-settings" class="premium-btn glass-button">
+                        <i class="fas fa-cog"></i>
+                        <span>الإعدادات</span>
+                    </button>
+                </div>
+                
+                <div class="quick-stats crystal">
+                    <div class="stat-item">
+                        <span class="stat-label">نقاط الإملاء</span>
+                        <span id="quick-spelling" class="stat-value">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">نقاط الخيال</span>
+                        <span id="quick-imagination" class="stat-value">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">النجوم</span>
+                        <span id="quick-stars" class="stat-value">☆☆☆</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- World Map Screen -->
+            <section id="screen-worlds" class="screen">
+                <div class="screen-header">
+                    <h2 class="screen-title golden-text">خريطة عوالم المملكة</h2>
+                    <p class="screen-subtitle">اختر عالماً لتبدأ مغامرتك التعليمية</p>
+                </div>
+                
+                <div class="worlds-grid">
+                    <!-- World 1: وادي الهمزات -->
+                    <div class="world-card premium-card" data-world="hamzat">
+                        <div class="world-card-header">
+                            <div class="world-icon-container">
+                                <img src="assets/premium_assets/world1_icon.png" alt="وادي الهمزات" class="world-icon">
+                                <div class="world-status unlocked">
+                                    <i class="fas fa-lock-open"></i>
+                                </div>
+                            </div>
+                            <h3 class="world-title">وادي الهمزات</h3>
+                            <span class="world-difficulty">سهل</span>
+                        </div>
+                        <p class="world-description">تعلم كتابة الهمزة في الكلمات</p>
+                        <div class="world-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 0%"></div>
+                            </div>
+                            <span class="progress-text">0/3 نجوم</span>
+                        </div>
+                        <button class="world-play-btn glass-button">
+                            <i class="fas fa-play"></i>
+                            <span>ابدأ المغامرة</span>
+                        </button>
+                    </div>
+                    
+                    <!-- World 2: غابة التاءات -->
+                    <div class="world-card premium-card" data-world="taa">
+                        <div class="world-card-header">
+                            <div class="world-icon-container">
+                                <img src="assets/premium_assets/world2_icon.png" alt="غابة التاءات" class="world-icon">
+                                <div class="world-status locked">
+                                    <i class="fas fa-lock"></i>
+                                </div>
+                            </div>
+                            <h3 class="world-title">غابة التاءات</h3>
+                            <span class="world-difficulty">متوسط</span>
+                        </div>
+                        <p class="world-description">فرق بين التاء المربوطة والتاء المفتوحة</p>
+                        <div class="world-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 0%"></div>
+                            </div>
+                            <span class="progress-text">مغلق</span>
+                        </div>
+                        <button class="world-play-btn glass-button" disabled>
+                            <i class="fas fa-lock"></i>
+                            <span>أكمل العالم الأول</span>
+                        </button>
+                    </div>
+                    
+                    <!-- World 3: جبل الألف اللينة -->
+                    <div class="world-card premium-card" data-world="alif">
+                        <div class="world-card-header">
+                            <div class="world-icon-container">
+                                <img src="assets/premium_assets/world3_icon.png" alt="جبل الألف اللينة" class="world-icon">
+                                <div class="world-status locked">
+                                    <i class="fas fa-lock"></i>
+                                </div>
+                            </div>
+                            <h3 class="world-title">جبل الألف اللينة</h3>
+                            <span class="world-difficulty">متوسط</span>
+                        </div>
+                        <p class="world-description">اختر بين الألف العادية والياء المقصورة</p>
+                        <div class="world-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 0%"></div>
+                            </div>
+                            <span class="progress-text">مغلق</span>
+                        </div>
+                        <button class="world-play-btn glass-button" disabled>
+                            <i class="fas fa-lock"></i>
+                            <span>أكمل العالم السابق</span>
+                        </button>
+                    </div>
+                    
+                    <!-- World 4: بحيرة علامات الترقيم -->
+                    <div class="world-card premium-card" data-world="punctuation">
+                        <div class="world-card-header">
+                            <div class="world-icon-container">
+                                <img src="assets/premium_assets/world4_icon.png" alt="بحيرة علامات الترقيم" class="world-icon">
+                                <div class="world-status locked">
+                                    <i class="fas fa-lock"></i>
+                                </div>
+                            </div>
+                            <h3 class="world-title">بحيرة علامات الترقيم</h3>
+                            <span class="world-difficulty">صعب</span>
+                        </div>
+                        <p class="world-description">ضع العلامة الصحيحة في نهاية الجملة</p>
+                        <div class="world-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 0%"></div>
+                            </div>
+                            <span class="progress-text">مغلق</span>
+                        </div>
+                        <button class="world-play-btn glass-button" disabled>
+                            <i class="fas fa-lock"></i>
+                            <span>أكمل العالم السابق</span>
+                        </button>
+                    </div>
+                    
+                    <!-- World 5: قصر الخيال الإبداعي -->
+                    <div class="world-card premium-card" data-world="creative">
+                        <div class="world-card-header">
+                            <div class="world-icon-container">
+                                <img src="assets/premium_assets/world5_icon.png" alt="قصر الخيال الإبداعي" class="world-icon">
+                                <div class="world-status locked">
+                                    <i class="fas fa-lock"></i>
+                                </div>
+                            </div>
+                            <h3 class="world-title">قصر الخيال الإبداعي</h3>
+                            <span class="world-difficulty">تحدي</span>
+                        </div>
+                        <p class="world-description">اكتب قصة وأجب عن ألغاز ممتعة</p>
+                        <div class="world-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 0%"></div>
+                            </div>
+                            <span class="progress-text">مغلق</span>
+                        </div>
+                        <button class="world-play-btn glass-button" disabled>
+                            <i class="fas fa-lock"></i>
+                            <span>أكمل جميع العوالم</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="screen-footer">
+                    <button id="btn-back-to-main" class="back-btn glass-button">
+                        <i class="fas fa-arrow-right"></i>
+                        <span>العودة للقائمة الرئيسية</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Game Screen -->
+            <section id="screen-game" class="screen">
+                <div class="game-header-hud hud-glass">
+                    <div class="hud-top">
+                        <div class="hud-item">
+                            <span class="hud-label">العالم:</span>
+                            <span id="current-world" class="hud-value">وادي الهمزات</span>
+                        </div>
+                        <div class="hud-item">
+                            <span class="hud-label">السؤال:</span>
+                            <span id="current-question" class="hud-value">1/5</span>
+                        </div>
+                        <div class="hud-item">
+                            <span class="hud-label">الوقت:</span>
+                            <span id="game-timer" class="hud-value">01:30</span>
+                        </div>
+                    </div>
+                    
+                    <div class="hud-bottom">
+                        <div class="score-display premium-card">
+                            <span class="score-label">النقاط:</span>
+                            <span id="game-score" class="score-value">0</span>
+                        </div>
+                        <div class="stars-display premium-card">
+                            <span class="stars-label">النجوم:</span>
+                            <span id="game-stars" class="stars-value">☆☆☆</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="game-content">
+                    <div class="question-container premium-card">
+                        <h3 id="question-title" class="question-title">سؤال العالم</h3>
+                        <p id="question-text" class="question-text">اختر الهمزة الصحيحة: (  _مـ ــــ ـــــ ـــــ ) البحر</p>
+                        
+                        <div id="question-options" class="options-container">
+                            <!-- Options will be generated here -->
+                        </div>
+                        
+                        <div class="question-feedback">
+                            <div id="feedback-message" class="feedback-message"></div>
+                            <div class="hint-container hidden">
+                                <i class="fas fa-lightbulb"></i>
+                                <span id="question-hint" class="hint-text">تلميح: الهمزة في أول الكلمة تختلف حسب حركتها</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="game-controls">
+                        <button id="btn-hint" class="control-btn glass-button">
+                            <i class="fas fa-lightbulb"></i>
+                            <span>طلب تلميح</span>
+                        </button>
+                        <button id="btn-skip" class="control-btn glass-button">
+                            <i class="fas fa-forward"></i>
+                            <span>تخطي السؤال</span>
+                        </button>
+                        <button id="btn-quit-game" class="control-btn glass-button danger">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>إنهاء اللعبة</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Profile Screen -->
+            <section id="screen-profile" class="screen">
+                <div class="profile-header premium-card">
+                    <div class="avatar-container">
+                        <div class="avatar-circle">
+                            <img id="player-avatar" src="assets/premium_assets/avatar_default.png" alt="الصورة الشخصية">
+                        </div>
+                        <button id="btn-change-avatar" class="avatar-edit-btn">
+                            <i class="fas fa-camera"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="profile-info">
+                        <h2 id="player-name" class="player-name">المستكشف</h2>
+                        <div class="player-level">
+                            <span class="level-label">المستوى:</span>
+                            <span id="player-level" class="level-value">1</span>
+                            <div class="level-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 25%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="profile-stats">
+                    <div class="stats-grid">
+                        <div class="stat-card premium-card">
+                            <div class="stat-icon spelling-icon">
+                                <i class="fas fa-spell-check"></i>
+                            </div>
+                            <h4 class="stat-title">نقاط الإملاء</h4>
+                            <div id="stat-spelling" class="stat-value-large">0</div>
+                            <p class="stat-subtitle">إتقان القواعد اللغوية</p>
+                        </div>
+                        
+                        <div class="stat-card premium-card">
+                            <div class="stat-icon imagination-icon">
+                                <i class="fas fa-brain"></i>
+                            </div>
+                            <h4 class="stat-title">نقاط الخيال</h4>
+                            <div id="stat-imagination" class="stat-value-large">0</div>
+                            <p class="stat-subtitle">الإبداع والتفكير</p>
+                        </div>
+                        
+                        <div class="stat-card premium-card">
+                            <div class="stat-icon stars-icon">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <h4 class="stat-title">النجوم</h4>
+                            <div id="stat-stars" class="stat-value-large">☆☆☆</div>
+                            <p class="stat-subtitle">إنجازات العالم</p>
+                        </div>
+                        
+                        <div class="stat-card premium-card">
+                            <div class="stat-icon coins-icon">
+                                <i class="fas fa-coins"></i>
+                            </div>
+                            <h4 class="stat-title">العملات</h4>
+                            <div id="stat-coins" class="stat-value-large">0</div>
+                            <p class="stat-subtitle">المكافآت المجمعة</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="profile-worlds premium-card">
+                    <h3 class="section-title">تقدمي في العوالم</h3>
+                    <div id="worlds-progress-list" class="worlds-list">
+                        <!-- Worlds progress will be generated here -->
+                    </div>
+                </div>
+                
+                <div class="screen-footer">
+                    <button id="btn-back-to-main-2" class="back-btn glass-button">
+                        <i class="fas fa-arrow-right"></i>
+                        <span>العودة للقائمة الرئيسية</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Leaderboard Screen -->
+            <section id="screen-leaderboard" class="screen">
+                <div class="leaderboard-header premium-card">
+                    <h2 class="leaderboard-title golden-text">قاعة الشرف</h2>
+                    <p class="leaderboard-subtitle">أفضل اللاعبين في المملكة</p>
+                    
+                    <div class="leaderboard-tabs">
+                        <button class="tab-btn active" data-tab="global">المستوى العالمي</button>
+                        <button class="tab-btn" data-tab="weekly">الأسبوعي</button>
+                        <button class="tab-btn" data-tab="friends">الأصدقاء</button>
+                    </div>
+                </div>
+                
+                <div class="leaderboard-content premium-card">
+                    <div class="top-players">
+                        <!-- Top 3 players will be shown here -->
+                    </div>
+                    
+                    <div class="leaderboard-table-container">
+                        <table class="leaderboard-table premium-table">
+                            <thead>
+                                <tr>
+                                    <th>المركز</th>
+                                    <th>اللاعب</th>
+                                    <th>المستوى</th>
+                                    <th>النقاط</th>
+                                    <th>النجوم</th>
+                                </tr>
+                            </thead>
+                            <tbody id="leaderboard-body">
+                                <!-- Leaderboard rows will be generated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="leaderboard-actions">
+                    <button id="btn-share-score" class="action-btn glass-button">
+                        <i class="fas fa-share-alt"></i>
+                        <span>مشاركة النتيجة</span>
+                    </button>
+                    <button id="btn-add-to-leaderboard" class="action-btn glass-button success">
+                        <i class="fas fa-medal"></i>
+                        <span>إضافة نتيجتي</span>
+                    </button>
+                    <button id="btn-back-to-main-3" class="back-btn glass-button">
+                        <i class="fas fa-arrow-right"></i>
+                        <span>العودة</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Teacher / Researcher Reports Screen -->
+            <section id="screen-reports" class="screen">
+                <div class="screen-header">
+                    <h2 class="screen-title golden-text">تقارير المعلم / الباحث</h2>
+                    <p class="screen-subtitle">نظرة شاملة على تقدم التلاميذ في مهارات الإملاء والخيال</p>
+                </div>
+
+                <div class="reports-overview">
+                    <div class="report-card premium-card">
+                        <h3 class="report-card-title">إحصائيات عامة</h3>
+                        <div class="report-card-row">
+                            <span>عدد الجلسات:</span>
+                            <span id="report-total-sessions">0</span>
+                        </div>
+                        <div class="report-card-row">
+                            <span>متوسط الدقة:</span>
+                            <span id="report-average-accuracy">0%</span>
+                        </div>
+                        <div class="report-card-row">
+                            <span>معدل التحسن الأخير:</span>
+                            <span id="report-improvement-rate">0%</span>
+                        </div>
+                    </div>
+
+                    <div class="report-card premium-card">
+                        <h3 class="report-card-title">نقاط المهارات</h3>
+                        <div class="report-card-row">
+                            <span>نقاط الإملاء:</span>
+                            <span id="report-total-spelling">0</span>
+                        </div>
+                        <div class="report-card-row">
+                            <span>نقاط الخيال:</span>
+                            <span id="report-total-imagination">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reports-worlds premium-card">
+                    <h3 class="section-title">ملخص العوالم</h3>
+                    <div class="reports-worlds-table-container">
+                        <table class="reports-table premium-table">
+                            <thead>
+                                <tr>
+                                    <th>العالم</th>
+                                    <th>إتقان العالم</th>
+                                    <th>النجوم</th>
+                                    <th>أفضل نتيجة</th>
+                                    <th>الصعوبة الحالية</th>
+                                    <th>آخر لعب</th>
+                                </tr>
+                            </thead>
+                            <tbody id="reports-worlds-body">
+                                <!-- World summary rows will be generated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="reports-history premium-card">
+                    <h3 class="section-title">سجل الجلسات للعالم المختار</h3>
+                    <div id="reports-history-container" class="reports-history-container">
+                        <!-- World history will be generated here -->
+                    </div>
+                </div>
+
+                <div class="screen-footer">
+                    <button id="btn-back-to-main-4" class="back-btn glass-button">
+                        <i class="fas fa-arrow-right"></i>
+                        <span>العودة للقائمة الرئيسية</span>
+                    </button>
+                </div>
+            </section>
+        </main>
+
+        <!-- Settings Modal -->
+        <div id="settings-modal-overlay" class="settings-modal-overlay hidden">
+            <div class="settings-modal premium-card">
+                <div class="settings-header">
+                    <h2 class="screen-title golden-text">الإعدادات</h2>
+                    <button id="btn-close-settings" class="close-settings">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <div class="settings-content">
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <i class="fas fa-volume-up"></i>
+                            <div>
+                                <h3>تأثيرات الصوت</h3>
+                                <p>تشغيل أو إيقاف أصوات الأزرار والأسئلة</p>
+                            </div>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="setting-sound">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <i class="fas fa-music"></i>
+                            <div>
+                                <h3>موسيقى الخلفية</h3>
+                                <p>تشغيل أو إيقاف موسيقى اللعبة</p>
+                            </div>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="setting-music">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <i class="fas fa-moon"></i>
+                            <div>
+                                <h3>الوضع الليلي</h3>
+                                <p>تفعيل الوضع الداكن لواجهة اللعبة</p>
+                            </div>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="theme-toggle">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <i class="fas fa-brain"></i>
+                            <div>
+                                <h3>الصعوبة التكيفية</h3>
+                                <p>تعديل صعوبة الأسئلة حسب أداء الطفل</p>
+                            </div>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="setting-adaptive">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <i class="fas fa-user-shield"></i>
+                            <div>
+                                <h3>وضع ولي الأمر</h3>
+                                <p>تمكين خيارات مخصصة للمعلم أو الوالد</p>
+                            </div>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="setting-parental">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="settings-actions">
+                    <button id="btn-settings-close" class="premium-btn glass-button">
+                        <span>إغلاق</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="game-footer">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <img src="assets/premium_assets/icon_mini_castle.png" alt="شعار صغير">
+                    <span>مملكة الكلمات والخيال</span>
+                </div>
+                <div class="footer-info">
+                    <p>لعبة تعليمية بريميوم للأطفال - تطوير مهارات الإملاء والخيال</p>
+                    <p class="copyright">© 2024 جميع الحقوق محفوظة | نسخة بريميوم</p>
+                </div>
+                <div class="footer-social">
+                    <button class="social-btn"><i class="fas fa-question-circle"></i></button>
+                    <button class="social-btn"><i class="fas fa-volume-up"></i></button>
+                    <button class="social-btn"><i class="fas fa-moon"></i></button>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Audio Elements -->
+    <audio id="audio-bg" loop></audio>
+    <audio id="audio-click"></audio>
+    <audio id="audio-correct"></audio>
+    <audio id="audio-wrong"></audio>
+    <audio id="audio-success"></audio>
+    <audio id="audio-level-up"></audio>
+
+    <!-- Game Script -->
+    <script src="js/game.js"></script>
+</body>
+</html>
