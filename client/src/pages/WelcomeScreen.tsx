@@ -1,14 +1,97 @@
 
 import { motion } from 'framer-motion';
+import { useEffect, useRef } from 'react';
 import { useGame } from '@/lib/game-context';
 import { Button } from '@/components/ui/button';
 import { Link } from 'wouter';
 import { Play, Map, Trophy, Settings as SettingsIcon, FileText } from 'lucide-react';
 import generatedBg from '@assets/generated_images/magical_game_background_with_floating_particles.png';
 import gameLogo from '@assets/generated_images/golden_magical_castle_game_logo.png';
+import { Howl } from 'howler';
 
 export default function WelcomeScreen() {
-  const { playerStats } = useGame();
+  const { playerStats, musicEnabled } = useGame();
+  const backgroundMusicRef = useRef<Howl | null>(null);
+
+  // Background music for welcome screen
+  useEffect(() => {
+    if (musicEnabled) {
+      console.log('Playing welcome screen background music');
+      
+      try {
+        if (!backgroundMusicRef.current) {
+          backgroundMusicRef.current = new Howl({
+            src: ['/music/background.mp3'],
+            loop: true,
+            volume: 0.2,
+            preload: true,
+            html5: true,
+            onload: () => console.log('Welcome screen music loaded'),
+            onloaderror: (id: number, error: any) => {
+              console.error('Welcome screen music load error:', error);
+              playFallbackMusic();
+            },
+            onplayerror: (id: number, error: any) => {
+              console.error('Welcome screen music play error:', error);
+              playFallbackMusic();
+            }
+          });
+        }
+        backgroundMusicRef.current.play();
+      } catch (error) {
+        console.error('Welcome screen music failed:', error);
+        playFallbackMusic();
+      }
+    } else if (backgroundMusicRef.current) {
+      try {
+        backgroundMusicRef.current.stop();
+        backgroundMusicRef.current = null;
+      } catch (e) {}
+    }
+
+    function playFallbackMusic() {
+      try {
+        const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        oscillator.frequency.value = 200; // Welcome frequency
+        oscillator.type = 'sine';
+        
+        gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+        
+        oscillator.start();
+        
+        const stopMusic = () => {
+          try {
+            oscillator.stop();
+            gainNode.disconnect();
+            oscillator.disconnect();
+          } catch (e) {}
+        };
+        
+        backgroundMusicRef.current = { stop: stopMusic } as any;
+        console.log('Welcome screen fallback music started');
+      } catch (error) {
+        console.error('Welcome screen fallback music failed:', error);
+      }
+    }
+
+    return () => {
+      if (backgroundMusicRef.current) {
+        try {
+          if (backgroundMusicRef.current && typeof (backgroundMusicRef.current as any).stop === 'function') {
+            (backgroundMusicRef.current as any).stop();
+          } else if (backgroundMusicRef.current && 'stop' in backgroundMusicRef.current) {
+            backgroundMusicRef.current.stop();
+          }
+        } catch (e) {}
+      }
+    };
+  }, [musicEnabled]);
 
   return (
     <div className="relative min-h-screen w-full overflow-hidden bg-cover bg-center flex flex-col items-center justify-center p-4"

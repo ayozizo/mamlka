@@ -7,19 +7,30 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import {
+  AlertDialog,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogAction,
+} from '@/components/ui/alert-dialog';
 import { useToast } from '@/hooks/use-toast';
 import frameBg from '@assets/generated_images/magical_control_panel_frame.png';
 import libraryBg from '@assets/stock_images/magical_fantasy_libr_db93ec0f.jpg';
 
 export default function Settings() {
   const { soundEnabled, toggleSound, musicEnabled, toggleMusic, playerStats } = useGame();
-  
+  const { toast } = useToast();
+
   const handleResetProgress = () => {
-    if (confirm('هل أنت متأكد من حذف جميع البيانات والبدء من جديد؟')) {
-      localStorage.removeItem('kingdom_stats');
-      localStorage.removeItem('kingdom_worlds');
-      window.location.reload();
-    }
+    localStorage.removeItem('kingdom_stats');
+    localStorage.removeItem('kingdom_worlds');
+    window.location.reload();
   };
 
   return (
@@ -72,7 +83,7 @@ export default function Settings() {
         </div>
 
         {/* Content Area */}
-        <div className="relative z-10 w-[80%] h-[70%] bg-slate-900/40 backdrop-blur-md rounded-[3rem] p-8 border border-white/10 shadow-inner flex flex-col gap-6">
+        <div className="relative z-10 w-[80%] h-[70%] bg-slate-900/50 backdrop-blur-xl rounded-[3rem] p-8 border border-white/10 shadow-[0_0_40px_rgba(56,189,248,0.25)] flex flex-col gap-6">
           
           {/* Header */}
           <div className="flex items-center justify-between border-b border-white/10 pb-4">
@@ -93,6 +104,24 @@ export default function Settings() {
                 <ArrowRight className="w-6 h-6 text-white group-hover:text-yellow-400" />
               </button>
              </Link>
+          </div>
+
+          {/* Player quick stats row */}
+          <div className="grid grid-cols-3 gap-3 mt-2 text-center text-xs sm:text-sm">
+            <Badge variant="outline" className="bg-slate-900/60 border-cyan-400/40 text-cyan-100 flex flex-col gap-1 py-2 rounded-2xl">
+              <span className="text-[11px] opacity-80">المستوى</span>
+              <span className="text-lg font-bold text-yellow-300">{playerStats.level}</span>
+            </Badge>
+            <Badge variant="outline" className="bg-slate-900/60 border-emerald-400/40 text-emerald-100 flex flex-col gap-1 py-2 rounded-2xl">
+              <span className="text-[11px] opacity-80">مجموع النجوم</span>
+              <span className="text-lg font-bold text-amber-300 flex items-center justify-center gap-1">
+                {playerStats.stars}
+              </span>
+            </Badge>
+            <Badge variant="outline" className="bg-slate-900/60 border-violet-400/40 text-violet-100 flex flex-col gap-1 py-2 rounded-2xl">
+              <span className="text-[11px] opacity-80">النقاط الكلية</span>
+              <span className="text-lg font-bold text-white">{playerStats.totalScore}</span>
+            </Badge>
           </div>
 
           {/* Settings Grid */}
@@ -145,14 +174,47 @@ export default function Settings() {
             </div>
 
             {/* Danger Zone */}
-            <Button 
-              variant="destructive" 
-              className="w-full py-6 rounded-xl bg-red-500/10 hover:bg-red-500/20 border border-red-500/50 text-red-200 hover:text-red-100 transition-all group"
-              onClick={handleResetProgress}
-            >
-              <Trash2 className="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform" />
-              <span className="font-bold text-lg">بدء رحلة جديدة</span>
-            </Button>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button 
+                  variant="destructive" 
+                  className="w-full py-6 rounded-xl bg-red-500/10 hover:bg-red-500/25 border border-red-500/60 text-red-200 hover:text-red-50 transition-all group shadow-[0_0_30px_rgba(239,68,68,0.35)]"
+                >
+                  <Trash2 className="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform" />
+                  <span className="font-bold text-lg">بدء رحلة جديدة</span>
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent className="bg-slate-950/95 border border-red-500/40 text-slate-50 backdrop-blur-2xl shadow-[0_0_60px_rgba(239,68,68,0.5)]">
+                <AlertDialogHeader>
+                  <AlertDialogTitle className="flex items-center gap-2 text-red-100 font-['Amiri'] text-xl">
+                    <ShieldAlert className="w-5 h-5 text-red-400" />
+                    تأكيد إعادة تعيين التقدم
+                  </AlertDialogTitle>
+                  <AlertDialogDescription className="text-slate-300 text-sm leading-relaxed">
+                    سيؤدي هذا إلى حذف جميع تقدم الطالب في العوالم والنجوم والنقاط، والبدء من الصفر.
+                    لا يمكن التراجع عن هذه الخطوة.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter className="flex flex-row-reverse gap-3 sm:flex-row sm:justify-end">
+                  <AlertDialogAction
+                    className="bg-red-600/90 hover:bg-red-700 text-white border border-red-400/70 shadow-md px-6"
+                    onClick={() => {
+                      handleResetProgress();
+                      toast({
+                        title: 'تم إعادة تعيين التقدم',
+                        description: 'تم حذف البيانات بنجاح، وجاهزون لبدء رحلة جديدة.',
+                        className: 'bg-slate-950/95 border border-red-500/40 text-red-100',
+                      });
+                    }}
+                  >
+                    نعم، احذف كل شيء
+                  </AlertDialogAction>
+                  <AlertDialogCancel className="bg-slate-900/80 hover:bg-slate-800 border border-slate-700 text-slate-100">
+                    إلغاء
+                  </AlertDialogCancel>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
             
           </div>
         </div>

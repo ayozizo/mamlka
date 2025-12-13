@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useGame } from '@/lib/game-context';
 import { WORLDS, Question } from '@/lib/game-data';
 import { useLocation, useRoute } from 'wouter';
@@ -8,10 +8,11 @@ import { ArrowLeft, CheckCircle, XCircle, Lightbulb, Star, Trophy, ArrowRight } 
 import confetti from 'canvas-confetti';
 import { useToast } from '@/hooks/use-toast';
 import { Progress } from '@/components/ui/progress';
+import { Howl } from 'howler';
 
 export default function LevelView() {
   const [, params] = useRoute('/level/:id');
-  const { worlds, completeLevel } = useGame();
+  const { worlds, completeLevel, soundEnabled, musicEnabled } = useGame();
   const [, setLocation] = useLocation();
   const { toast } = useToast();
 
@@ -24,6 +25,177 @@ export default function LevelView() {
   const [score, setScore] = useState(0);
   const [showHint, setShowHint] = useState(false);
   const [levelComplete, setLevelComplete] = useState(false);
+  const backgroundMusicRef = useRef<Howl | null>(null);
+
+  // Sound effects
+  const sounds = {
+    correct: new Howl({
+      src: ['/sounds/correct.mp3'],
+      volume: 0.5,
+      preload: true,
+      html5: true,
+      onload: () => console.log('Correct sound loaded'),
+      onloaderror: (id: number, error: any) => console.error('Correct sound load error:', error),
+      onplayerror: (id: number, error: any) => console.error('Correct sound play error:', error)
+    }),
+    incorrect: new Howl({
+      src: ['/sounds/incorrect.mp3'],
+      volume: 0.5,
+      preload: true,
+      html5: true,
+      onload: () => console.log('Incorrect sound loaded'),
+      onloaderror: (id: number, error: any) => console.error('Incorrect sound load error:', error),
+      onplayerror: (id: number, error: any) => console.error('Incorrect sound play error:', error)
+    }),
+    click: new Howl({
+      src: ['/sounds/click.mp3'],
+      volume: 0.3,
+      preload: true,
+      html5: true,
+      onload: () => console.log('Click sound loaded'),
+      onloaderror: (id: number, error: any) => console.error('Click sound load error:', error),
+      onplayerror: (id: number, error: any) => console.error('Click sound play error:', error)
+    }),
+    complete: new Howl({
+      src: ['/sounds/complete.mp3'],
+      volume: 0.6,
+      preload: true,
+      html5: true,
+      onload: () => console.log('Complete sound loaded'),
+      onloaderror: (id: number, error: any) => console.error('Complete sound load error:', error),
+      onplayerror: (id: number, error: any) => console.error('Complete sound play error:', error)
+    })
+  };
+
+  // Audio effects - try real files first, then fallback
+  const playSound = (type: 'correct' | 'incorrect' | 'click' | 'complete') => {
+    if (!soundEnabled) return;
+    
+    console.log(`Attempting to play sound: ${type}`);
+    
+    // First try Howler with real files
+    try {
+      sounds[type].play();
+      console.log(`Playing sound file: ${type}`);
+      return;
+    } catch (error) {
+      console.error(`Howler failed for ${type}:`, error);
+    }
+    
+    // Fallback to Web Audio API
+    try {
+      const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      
+      const frequencies = {
+        correct: 800,
+        incorrect: 300,
+        click: 600,
+        complete: 1000
+      };
+      
+      oscillator.frequency.value = frequencies[type];
+      oscillator.type = 'sine';
+      
+      gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+      
+      oscillator.start(audioContext.currentTime);
+      oscillator.stop(audioContext.currentTime + 0.2);
+      
+      console.log(`Playing fallback sound: ${type}`);
+    } catch (error) {
+      console.error(`Fallback audio failed for ${type}:`, error);
+    }
+  };
+
+  // Background music - try real file first, then fallback
+  useEffect(() => {
+    if (musicEnabled && world) {
+      console.log('Attempting to play background music');
+      
+      // First try Howler with real file
+      try {
+        if (!backgroundMusicRef.current) {
+          backgroundMusicRef.current = new Howl({
+            src: ['/music/background.mp3'],
+            loop: true,
+            volume: 0.2,
+            preload: true,
+            html5: true,
+            onload: () => console.log('Background music loaded'),
+            onloaderror: (id: number, error: any) => {
+              console.error('Background music load error:', error);
+              // Fallback to simple tone
+              playFallbackMusic();
+            },
+            onplayerror: (id: number, error: any) => {
+              console.error('Background music play error:', error);
+              // Fallback to simple tone
+              playFallbackMusic();
+            }
+          });
+        }
+        backgroundMusicRef.current.play();
+        console.log('Playing background music file');
+      } catch (error) {
+        console.error('Background music failed:', error);
+        playFallbackMusic();
+      }
+    } else if (backgroundMusicRef.current) {
+      try {
+        backgroundMusicRef.current.stop();
+        backgroundMusicRef.current = null;
+      } catch (e) {}
+    }
+
+    function playFallbackMusic() {
+      try {
+        const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        oscillator.frequency.value = 220; // A3 note
+        oscillator.type = 'sine';
+        
+        gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+        
+        oscillator.start();
+        
+        const stopMusic = () => {
+          try {
+            oscillator.stop();
+            gainNode.disconnect();
+            oscillator.disconnect();
+          } catch (e) {}
+        };
+        
+        backgroundMusicRef.current = { stop: stopMusic } as any;
+        console.log('Background music fallback started');
+      } catch (error) {
+        console.error('Background music fallback failed:', error);
+      }
+    }
+
+    return () => {
+      if (backgroundMusicRef.current) {
+        try {
+          if (backgroundMusicRef.current && typeof (backgroundMusicRef.current as any).stop === 'function') {
+            (backgroundMusicRef.current as any).stop();
+          } else if (backgroundMusicRef.current && 'stop' in backgroundMusicRef.current) {
+            backgroundMusicRef.current.stop();
+          }
+        } catch (e) {}
+      }
+    };
+  }, [musicEnabled, world]);
 
   useEffect(() => {
     if (!world) {
@@ -39,14 +211,17 @@ export default function LevelView() {
   const handleAnswer = (index: number) => {
     if (selectedOption !== null) return; // Prevent multiple clicks
 
+    playSound('click');
     setSelectedOption(index);
     const correct = index === currentQuestion.correctIndex;
     setIsCorrect(correct);
 
     if (correct) {
+      playSound('correct');
       setScore(s => s + 10);
       if (Math.random() > 0.7) triggerConfetti();
     } else {
+      playSound('incorrect');
       toast({
         title: "حاول مرة أخرى!",
         description: currentQuestion.hint,
@@ -68,6 +243,7 @@ export default function LevelView() {
   };
 
   const finishLevel = () => {
+    playSound('complete');
     setLevelComplete(true);
     triggerBigConfetti();
     

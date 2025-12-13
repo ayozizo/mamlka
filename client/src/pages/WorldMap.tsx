@@ -1,10 +1,12 @@
 
 import { motion } from 'framer-motion';
+import { useEffect, useRef } from 'react';
 import { useGame } from '@/lib/game-context';
 import { World } from '@/lib/game-data';
 import { Link, useLocation } from 'wouter';
 import { Lock, Star, ChevronRight } from 'lucide-react';
 import mapBg from '@assets/generated_images/fantasy_kingdom_game_map_with_5_regions.png';
+import { Howl } from 'howler';
 
 // Icons
 import valleyIcon from '@assets/generated_images/green_valley_game_icon.png';
@@ -14,8 +16,89 @@ import lakeIcon from '@assets/generated_images/blue_lake_game_icon.png';
 import palaceIcon from '@assets/generated_images/golden_cloud_palace_game_icon.png';
 
 export default function WorldMap() {
-  const { worlds } = useGame();
+  const { worlds, musicEnabled } = useGame();
   const [, setLocation] = useLocation();
+  const backgroundMusicRef = useRef<Howl | null>(null);
+
+  // Background music for world map
+  useEffect(() => {
+    if (musicEnabled) {
+      console.log('Playing world map background music');
+      
+      try {
+        if (!backgroundMusicRef.current) {
+          backgroundMusicRef.current = new Howl({
+            src: ['/music/background.mp3'],
+            loop: true,
+            volume: 0.15,
+            preload: true,
+            html5: true,
+            onload: () => console.log('World map music loaded'),
+            onloaderror: (id: number, error: any) => {
+              console.error('World map music load error:', error);
+              playFallbackMusic();
+            },
+            onplayerror: (id: number, error: any) => {
+              console.error('World map music play error:', error);
+              playFallbackMusic();
+            }
+          });
+        }
+        backgroundMusicRef.current.play();
+      } catch (error) {
+        console.error('World map music failed:', error);
+        playFallbackMusic();
+      }
+    } else if (backgroundMusicRef.current) {
+      try {
+        backgroundMusicRef.current.stop();
+        backgroundMusicRef.current = null;
+      } catch (e) {}
+    }
+
+    function playFallbackMusic() {
+      try {
+        const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        oscillator.frequency.value = 180; // Lower frequency for map
+        oscillator.type = 'sine';
+        
+        gainNode.gain.setValueAtTime(0.08, audioContext.currentTime);
+        
+        oscillator.start();
+        
+        const stopMusic = () => {
+          try {
+            oscillator.stop();
+            gainNode.disconnect();
+            oscillator.disconnect();
+          } catch (e) {}
+        };
+        
+        backgroundMusicRef.current = { stop: stopMusic } as any;
+        console.log('World map fallback music started');
+      } catch (error) {
+        console.error('World map fallback music failed:', error);
+      }
+    }
+
+    return () => {
+      if (backgroundMusicRef.current) {
+        try {
+          if (backgroundMusicRef.current && typeof (backgroundMusicRef.current as any).stop === 'function') {
+            (backgroundMusicRef.current as any).stop();
+          } else if (backgroundMusicRef.current && 'stop' in backgroundMusicRef.current) {
+            backgroundMusicRef.current.stop();
+          }
+        } catch (e) {}
+      }
+    };
+  }, [musicEnabled]);
 
   return (
     <div className="relative min-h-screen w-full bg-slate-900 overflow-hidden">
