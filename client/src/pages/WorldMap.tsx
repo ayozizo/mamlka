@@ -5,15 +5,7 @@ import { useGame } from '@/lib/game-context';
 import { World } from '@/lib/game-data';
 import { Link, useLocation } from 'wouter';
 import { Lock, Star, ChevronRight } from 'lucide-react';
-import mapBg from '@assets/generated_images/fantasy_kingdom_game_map_with_5_regions.png';
 import { Howl } from 'howler';
-
-// Icons
-import valleyIcon from '@assets/generated_images/green_valley_game_icon.png';
-import forestIcon from '@assets/generated_images/magical_forest_game_icon.png';
-import mountainIcon from '@assets/generated_images/snowy_mountain_game_icon.png';
-import lakeIcon from '@assets/generated_images/blue_lake_game_icon.png';
-import palaceIcon from '@assets/generated_images/golden_cloud_palace_game_icon.png';
 
 export default function WorldMap() {
   const { worlds, musicEnabled } = useGame();
@@ -101,12 +93,18 @@ export default function WorldMap() {
   }, [musicEnabled]);
 
   return (
-    <div className="relative min-h-screen w-full bg-slate-900 overflow-hidden">
-      {/* Map Background */}
-      <div 
-        className="absolute inset-0 w-full h-full bg-cover bg-center md:bg-contain bg-no-repeat transform scale-125 md:scale-100 origin-center transition-transform duration-1000"
-        style={{ backgroundImage: `url(${mapBg})` }}
-      >
+    <div className="relative min-h-screen w-full bg-gradient-to-br from-indigo-900 via-purple-900 to-slate-900 overflow-hidden">
+      {/* Magical Map Background */}
+      <div className="absolute inset-0 w-full h-full">
+        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-blue-800/30 via-purple-800/30 to-indigo-800/30"></div>
+        
+        {/* Magical regions */}
+        <div className="absolute top-10 left-10 w-40 h-40 bg-green-500/20 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute top-1/3 right-20 w-32 h-32 bg-emerald-500/20 rounded-full blur-3xl animate-pulse delay-300"></div>
+        <div className="absolute bottom-1/4 left-1/4 w-36 h-36 bg-blue-500/20 rounded-full blur-3xl animate-pulse delay-700"></div>
+        <div className="absolute top-2/3 right-1/3 w-28 h-28 bg-purple-500/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute bottom-20 right-10 w-44 h-44 bg-yellow-500/20 rounded-full blur-3xl animate-pulse delay-1500"></div>
+        
         <div className="absolute inset-0 bg-black/10"></div>
       </div>
 
@@ -159,16 +157,17 @@ function WorldNode({ world, index }: { world: World; index: number }) {
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 bg-white/40 rounded-full blur-xl animate-pulse -z-10"></div>
         )}
 
-        {/* Node Image */}
+        {/* Node Icon - CSS based */}
         <div className={`
           relative w-20 h-20 md:w-28 md:h-28 transition-all duration-300
           ${world.isUnlocked ? 'filter-none drop-shadow-2xl' : 'grayscale opacity-70 blur-[1px]'}
         `}>
-          <img 
-            src={getIconImage(world.icon)} 
-            alt={world.name} 
-            className="w-full h-full object-contain" 
-          />
+          <div className={`
+            w-full h-full rounded-full flex items-center justify-center text-3xl font-bold
+            ${getIconColor(world.icon)} ${getIconBgColor(world.icon)}
+          `}>
+            {getIconEmoji(world.icon)}
+          </div>
           
           {!world.isUnlocked && (
             <div className="absolute inset-0 flex items-center justify-center">
@@ -211,13 +210,35 @@ function WorldNode({ world, index }: { world: World; index: number }) {
   );
 }
 
-function getIconImage(iconType: string) {
+function getIconColor(iconType: string) {
   switch (iconType) {
-    case 'valley': return valleyIcon;
-    case 'forest': return forestIcon;
-    case 'mountain': return mountainIcon;
-    case 'lake': return lakeIcon;
-    case 'palace': return palaceIcon;
-    default: return valleyIcon;
+    case 'valley': return 'text-green-600';
+    case 'forest': return 'text-emerald-600';
+    case 'mountain': return 'text-blue-600';
+    case 'lake': return 'text-cyan-600';
+    case 'palace': return 'text-yellow-600';
+    default: return 'text-green-600';
+  }
+}
+
+function getIconBgColor(iconType: string) {
+  switch (iconType) {
+    case 'valley': return 'bg-green-100';
+    case 'forest': return 'bg-emerald-100';
+    case 'mountain': return 'bg-blue-100';
+    case 'lake': return 'bg-cyan-100';
+    case 'palace': return 'bg-yellow-100';
+    default: return 'bg-green-100';
+  }
+}
+
+function getIconEmoji(iconType: string) {
+  switch (iconType) {
+    case 'valley': return '🌿';
+    case 'forest': return '🌲';
+    case 'mountain': return '🏔️';
+    case 'lake': return '💧';
+    case 'palace': return '🏰';
+    default: return '🌿';
   }
 }
