@@ -5,6 +5,8 @@ import { useGame } from '@/lib/game-context';
 import { Button } from '@/components/ui/button';
 import { Link } from 'wouter';
 import { Play, Map, Trophy, Settings as SettingsIcon, FileText } from 'lucide-react';
+import generatedBg from '@assets/generated_images/magical_game_background_with_floating_particles.png';
+import gameLogo from '@assets/generated_images/golden_magical_castle_game_logo.png';
 import { Howl } from 'howler';
 
 export default function WelcomeScreen() {
@@ -92,13 +94,11 @@ export default function WelcomeScreen() {
   }, [musicEnabled]);
 
   return (
-    <div className="relative min-h-screen w-full overflow-hidden bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 flex flex-col items-center justify-center p-4">
+    <div className="relative min-h-screen w-full overflow-hidden bg-cover bg-center flex flex-col items-center justify-center p-4"
+         style={{ backgroundImage: `url(${generatedBg})` }}>
       
-      {/* Magical background effects */}
+      {/* Overlay for readability */}
       <div className="absolute inset-0 bg-blue-900/30 backdrop-blur-[2px] z-0"></div>
-      <div className="absolute top-20 left-10 w-32 h-32 bg-yellow-400/20 rounded-full blur-3xl animate-pulse"></div>
-      <div className="absolute bottom-20 right-10 w-40 h-40 bg-purple-400/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
-      <div className="absolute top-1/2 left-1/4 w-24 h-24 bg-blue-400/20 rounded-full blur-3xl animate-pulse delay-500"></div>
 
       <div className="relative z-10 flex flex-col items-center gap-8 max-w-md w-full">
         
@@ -109,14 +109,13 @@ export default function WelcomeScreen() {
           transition={{ duration: 0.8 }}
           className="text-center flex flex-col items-center"
         >
-          {/* Logo with CSS styling instead of image */}
-          <motion.div
-            className="w-48 h-48 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center mb-6 shadow-[0_0_50px_rgba(251,191,36,0.6)]"
+          <motion.img
+            src={gameLogo}
+            alt="Kingdom Logo"
+            className="w-48 h-48 object-contain drop-shadow-[0_0_30px_rgba(251,191,36,0.6)] mb-6"
             animate={{ y: [0, -15, 0] }}
             transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
-          >
-            <div className="text-white text-6xl font-bold">م</div>
-          </motion.div>
+          />
           
           <h1 className="text-5xl md:text-6xl font-bold text-white drop-shadow-[0_4px_4px_rgba(0,0,0,0.5)] font-['Amiri'] animate-shine leading-tight">
             مملكة الكلمات
